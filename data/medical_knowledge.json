@@ -1,0 +1,88 @@
+{
+  "conditions": [
+    {
+      "id": "malaria",
+      "name": "Paludisme",
+      "category": "infectious_disease",
+      "symptoms": ["fièvre", "frissons", "maux de tête", "nausées", "vomissements"],
+      "description": "Maladie transmise par les moustiques, très commune en Afrique",
+      "treatment": "Traitement antipaludique sous surveillance médicale",
+      "prevention": "Moustiquaires imprégnées, répulsifs, prophylaxie si recommandée",
+      "cultural_context": "Utilisation traditionnelle d'écorces d'arbres, mais traitement médical essentiel",
+      "languages": {
+        "fr": "Paludisme",
+        "en": "Malaria",
+        "wolof": "Sunu",
+        "hausa": "Zazzabi"
+      }
+    },
+    {
+      "id": "diarrhea",
+      "name": "Diarrhée",
+      "category": "digestive",
+      "symptoms": ["selles liquides", "crampes abdominales", "déshydratation"],
+      "description": "Trouble digestif fréquent, peut être grave chez les enfants",
+      "treatment": "Réhydratation orale, zinc pour les enfants, consultation si persistante",
+      "prevention": "Eau potable, hygiène alimentaire, lavage des mains",
+      "cultural_context": "Tisanes traditionnelles peuvent aider, mais réhydratation prioritaire",
+      "languages": {
+        "fr": "Diarrhée",
+        "en": "Diarrhea",
+        "wolof": "Biir bu yar",
+        "hausa": "Gudawa"
+      }
+    },
+    {
+      "id": "respiratory_infection",
+      "name": "Infection respiratoire",
+      "category": "respiratory",
+      "symptoms": ["toux", "fièvre", "difficultés respiratoires", "douleur thoracique"],
+      "description": "Infection des voies respiratoires, peut être virale ou bactérienne",
+      "treatment": "Repos, hydratation, antibiotiques si bactérienne",
+      "prevention": "Vaccination, éviter les contacts malades, hygiène",
+      "cultural_context": "Inhalations avec eucalyptus traditionnellement utilisées",
+      "languages": {
+        "fr": "Infection respiratoire",
+        "en": "Respiratory infection",
+        "wolof": "Bere bu yar",
+        "hausa": "Ciwon numfashi"
+      }
+    }
+  ],
+  "medications": [
+    {
+      "id": "paracetamol",
+      "name": "Paracétamol",
+      "category": "analgesic",
+      "indications": ["fièvre", "douleur légère à modérée"],
+      "dosage": "500mg à 1g toutes les 4-6 heures, maximum 4g/jour",
+      "precautions": "Attention aux surdosages, éviter avec alcool",
+      "availability": "Largement disponible en Afrique",
+      "cultural_notes": "Souvent utilisé en première intention"
+    },
+    {
+      "id": "oral_rehydration_solution",
+      "name": "Solution de réhydratation orale",
+      "category": "rehydration",
+      "indications": ["diarrhée", "déshydratation"],
+      "dosage": "1 sachet dans 1 litre d'eau propre",
+      "precautions": "Préparer avec eau propre, consommer rapidement",
+      "availability": "Disponible dans centres de santé",
+      "cultural_notes": "Alternative aux remèdes traditionnels"
+    }
+  ],
+  "emergency_signs": [
+    {
+      "condition": "general",
+      "signs": [
+        "Fièvre très élevée (>39°C)",
+        "Difficultés respiratoires sévères",
+        "Vomissements persistants",
+        "Signes de déshydratation sévère",
+        "Convulsions",
+        "Perte de conscience"
+      ],
+      "action": "Consulter immédiatement un professionnel de santé"
+    }
+  ]
+}
