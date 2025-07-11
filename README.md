@@ -36,26 +36,14 @@ Ce dépôt contient les prototypes et la documentation technique développés pa
 
 ## 🏗️ Architecture
 
-```
-┌────────────────────┐    ┌────────────────────┐    ┌────────────────────┐
-│   Frontend         │    │   API Backend      │    │   Moteur IA        │
-│   (React)          │◄──►│   (Flask)          │◄──►│   (TensorFlow)     │
-└────────────────────┘    └────────────────────┘    └────────────────────┘
-        │                        │                        │
-        │                        │                        │
-        ▼                        ▼                        ▼
-┌────────────────────┐    ┌────────────────────┐    ┌────────────────────┐
-│   Tableau de bord  │    │   Base de données  │    │   Stockage Modèles │
-│   Analytics        │    │   (PostgreSQL)     │    │   (MLflow)         │
-└────────────────────┘    └────────────────────┘    └────────────────────┘
-```
-
+ ![alt text](assets/architecture.png)
+ 
 ## 🛠️ Pile Technologique
 
 ### **Backend**
 - **Python 3.8+** : Logique principale des applications.
 - **TensorFlow 2.x** : Framework pour les modèles d’apprentissage automatique.
-- **Flask** : Framework pour l’API RESTful.
+- **FastAPI** : Framework pour l’API RESTful.
 - **PostgreSQL** : Gestion des données hospitalières.
 - **Redis** : Cache pour les performances à faible latence.
 - **Celery** : Traitement asynchrone des tâches.
@@ -71,6 +59,7 @@ Ce dépôt contient les prototypes et la documentation technique développés pa
 - **Kubernetes** : Orchestration pour le déploiement.
 - **Google Cloud/AWS** : Hébergement cloud.
 - **GitHub Actions** : Pipeline CI/CD.
+ ![alt text](assets/tech.png)
 
 ## 📊 Modèles d’Apprentissage Automatique
 
@@ -88,141 +77,6 @@ Ce dépôt contient les prototypes et la documentation technique développés pa
 - **Visualisation** : Plotly pour les tableaux de bord interactifs.
 - **Optimisation** : Algorithmes pour recommandations de gestion des stocks.
 
-## 🚦 Démarrage
-
-### **Prérequis**
-```bash
-Python 3.8+
-Node.js 16+
-PostgreSQL 12+
-Redis 6+
-```
-
-### **Installation**
-
-1. **Cloner le dépôt**
-```bash
-git clone https://github.com/AICELLGI/health-ai-hackathon-2025.git
-cd health-ai-hackathon-2025
-```
-
-2. **Configuration Backend**
-```bash
-# Créer un environnement virtuel
-python -m venv venv
-source venv/bin/activate  # Sur Windows : venv\Scripts\activate
-
-# Installer les dépendances
-pip install -r requirements.txt
-
-# Configuration de la base de données
-python manage.py migrate
-python manage.py create_admin
-
-# Démarrer les services
-redis-server
-celery -A app.celery worker --loglevel=info
-python app.py
-```
-
-3. **Configuration Frontend**
-```bash
-cd frontend
-npm install
-npm start
-```
-
-4. **Déploiement Docker**
-```bash
-docker-compose up --build
-```
-
-## 📈 Utilisation
-
-### **Endpoints API (exemple pour Track 1)**
-```bash
-POST /api/v1/patient-feedback
-Content-Type: application/json
-
-{
-  "patient_id": "pt_123456",
-  "feedback": "Service rapide, médecin à l'écoute",
-  "language": "français",
-  "timestamp": "2025-07-15T10:30:00Z"
-}
-```
-
-#### **Réponse**
-```json
-{
-  "sentiment": "positif",
-  "themes": ["service rapide", "écoute"],
-  "confidence": 0.95
-}
-```
-
-### **Accès au tableau de bord**
-- **URL** : `http://localhost:3000`
-- **Admin par défaut** : `admin@healthai.com`
-- **Mot de passe** : `admin123`
-
-## 🧪 Tests
-
-### **Tests unitaires**
-```bash
-# Tests Backend
-python -m pytest tests/
-
-# Tests Frontend
-cd frontend
-npm test
-```
-
-### **Tests d’intégration**
-```bash
-# Tests API
-python -m pytest tests/integration/
-```
-
-## 📊 Métriques de Performance
-
-### **Performance des modèles**
-- **Précision (Track 1)** : 92 % pour l’analyse des sentiments.
-- **Précision (Track 2)** : 95 % pour les réponses du chatbot.
-- **Précision (Track 3)** : 90 % pour les prévisions de stock.
-- **Taux de faux positifs** : < 3 % pour tous les modules.
-
-### **Performance du système**
-- **Latence** : < 200 ms par requête.
-- **Débit** : 5 000+ transactions/seconde.
-- **Disponibilité** : SLA de 99,9 %.
-- **Scalabilité** : Support de mise à l’échelle horizontale.
-
-## 🔒 Fonctionnalités de Sécurité
-
-- **Chiffrement des données** : AES-256 pour les données au repos.
-- **Authentification API** : JWT pour sécuriser les endpoints.
-- **Conformité** : Respect des normes éthiques et RGPD.
-- **Journalisation** : Suivi complet des interactions pour audit.
-
-## 🌍 Déploiement
-
-### **Environnement de production**
-```bash
-# Variables d’environnement
-export DATABASE_URL="postgresql://user:pass@localhost/healthdb"
-export REDIS_URL="redis://localhost:6379"
-export JWT_SECRET="votre-clé-secrète"
-export ML_MODEL_PATH="models/production/health_model.pkl"
-
-# Déploiement avec Docker
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-### **Surveillance**
-- **Prometheus** : Collecte des métriques.
-- **Grafana** : Visualisation des performances.
-- **Sentry** : Suivi des erreurs.
 
 ## 🤝 Contribution
 
