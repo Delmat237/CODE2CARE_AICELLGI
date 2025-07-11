@@ -10,6 +10,19 @@
 
 Ce dépôt contient les prototypes et la documentation technique développés par l’équipe **AICELLGI** lors du Hackathon IA en Santé 2025, organisé à l’Hôpital Général de Douala (DGH) en partenariat avec Data Science Without Borders (DSWB) et financé par la Wellcome Trust. Les solutions proposées répondent à trois défis clés : un système de gestion des retours et rappels des patients, un chatbot éducatif basé sur des modèles de langage (LLM), et un système de surveillance des stocks de banque de sang.
 
+## Structure du dépôt
+Le dépôt est organisé en plusieurs dossiers pour faciliter l’accès aux ressources :
+
+| **Dossier**       | **Contenu**                                                                 |
+|--------------------|-----------------------------------------------------------------------------|
+| `Track1/`         | Fichiers pour le Système de gestion des retours et rappels des patients.    |
+| `Track2/`         | Fichiers pour le Chatbot pour l’éducation et le soutien des patients.        |
+| `Track3/`         | Fichiers pour le Système de surveillance et de prévision des stocks de sang. |
+| `documentation/`  | Rapports techniques, manuels, et diapositives de présentation.              |
+| `data/`           | Données synthétiques ou approuvées utilisées pour les tests.                |
+
+Chaque module contient un fichier README détaillant les instructions pour configurer, exécuter, et tester les prototypes, incluant les dépendances logicielles et les prérequis techniques.
+
 ## 🚀 Fonctionnalités
 
 ### **Track 1 : Système de gestion des retours et rappels des patients**
