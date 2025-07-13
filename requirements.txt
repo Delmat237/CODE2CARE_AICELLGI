@@ -1,0 +1,11 @@
+fastapi==0.103.0
+sqlalchemy==2.0.41
+psycopg2-binary==2.9.10
+alembic==1.11.1
+pydantic==2.4.2
+pydantic-settings==2.0.3
+twilio==8.11.0
+python-dotenv==1.0.0
+uvicorn==0.23.2
+aiohttp==3.12.13
+async-timeout==5.0.1
