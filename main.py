@@ -16,8 +16,8 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(feedback.router, prefix="/api/v1", tags=["feedback"])
-app.include_router(reminders.router, prefix="/api/v1", tags=["reminders"])
+app.include_router(feedback.router, prefix="/api", tags=["feedback"])
+app.include_router(reminders.router, prefix="/api", tags=["reminders"])
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

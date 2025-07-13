@@ -232,7 +232,7 @@ docker-compose up --build
 
 #### **Soumission de retours**
 ```bash
-POST /api/v1/feedback
+POST /api/feedback
 Content-Type: application/json
 
 {
@@ -246,7 +246,7 @@ Content-Type: application/json
 
 #### **Planification d'un rappel**
 ```bash
-POST /api/v1/reminders
+POST /api/reminders
 Content-Type: application/json
 
 {
