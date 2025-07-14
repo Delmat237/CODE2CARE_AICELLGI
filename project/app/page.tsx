@@ -18,8 +18,11 @@ import {
   Heart, Globe, BarChart3, PieChart, Activity, Clock
 } from 'lucide-react';
 import Link from 'next/link';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
-export default function DashboardPage() {
+
+export default async function DashboardPage() {
   const { t } = useLanguage();
   const [feedbacks, setFeedbacks] = useState<PatientFeedback[]>([]);
   const [filteredFeedbacks, setFilteredFeedbacks] = useState<PatientFeedback[]>([]);
@@ -28,6 +31,7 @@ export default function DashboardPage() {
   const [selectedGender, setSelectedGender] = useState('all');
   const [selectedLanguage, setSelectedLanguage] = useState('all');
   const [loading, setLoading] = useState(true);
+  const session = await getServerSession(authOptions);
 
   useEffect(() => {
     loadData();
