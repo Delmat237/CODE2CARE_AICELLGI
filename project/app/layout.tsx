@@ -1,13 +1,21 @@
+// app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './api/auth/[...nextauth]/route';
 import { Providers } from './providers';
+import AuthProvider from './AuthProvider';
+import Header from '@/components/Header';
+
 
 const inter = Inter({ subsets: ['latin'] });
+export const dynamic = "force-dynamic";
+
 
 export const metadata: Metadata = {
   title: 'DGH Patient Feedback System',
-  description: 'Système de gestion et d\'analyse des feedbacks patients - Douala General Hospital',
+  description: "Système de gestion et d'analyse des feedbacks patients - Douala General Hospital",
   keywords: 'patient feedback, hospital, healthcare, Douala, Cameroon',
   authors: [{ name: 'DGH Development Team' }],
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
@@ -15,13 +23,15 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -29,9 +39,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="format-detection" content="telephone=no" />
       </head>
-      <body className={inter.className}>
+      <body className={`min-h-screen bg-gray-100 ${inter.className}`}>
         <Providers>
-          {children}
+          <AuthProvider session={session}>
+            <Header />
+            {children}
+          </AuthProvider>
         </Providers>
       </body>
     </html>
