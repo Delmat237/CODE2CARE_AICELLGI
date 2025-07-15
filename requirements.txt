@@ -9,3 +9,8 @@ python-dotenv==1.0.0
 uvicorn==0.23.2
 aiohttp==3.12.13
 async-timeout==5.0.1
+twilio
+pyjwt
+passlib[bcrypt]
+pydantic[email]
+python-multipart

@@ -11,6 +11,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from database import Base
 from schemas.feedback import Feedback
 from schemas.reminder import Reminder
+from schemas.user import User
+from schemas.refresh_token import RefreshToken  
 
 config = context.config
 

@@ -117,8 +117,8 @@ Track1/backend/
 
 ### **`routers/`**
 
-- **feedback.py** : Contient l'endpoint `POST /api/v1/feedback` pour soumettre des retours.
-- **reminders.py** : Contient l'endpoint `POST /api/v1/reminders` pour planifier des rappels (SMS/IVR/email).
+- **feedback.py** : Contient l'endpoint `POST /api/feedback` pour soumettre des retours.
+- **reminders.py** : Contient l'endpoint `POST /api/reminders` pour planifier des rappels (SMS/IVR/email).
 
 ### **`utils/`**
 
@@ -152,7 +152,125 @@ Track1/backend/
 - Ajouter la transcription vocale dans `utils/` (Google Speech-to-Text).
 - Configurer l'authentification JWT dans `main.py` et `routers/`.
 - Documenter les endpoints dans un fichier `openapi.json` généré par FastAPI.
-- 
+
+## 🚀 Nouveautés (Mise à jour 14 Juillet 2024)
+
+### **Fonctionnalités Ajoutées**
+- **Système d'authentification complet** avec JWT (access + refresh tokens)
+- **CRUD complet** pour les retours patients (feedback)
+- **CRUD complet** pour les rappels (reminders)
+- **Initialisation du Traitement vocal** intégré via Google Speech-to-Text
+
+## 🔐 Authentification
+
+### **Endpoints**
+- `POST /api/auth/login` - Authentification avec username/password
+- `POST /api/auth/register` - Creation d'un compte
+- `POST /api/auth/refresh` - Rafraîchissement du token
+- `POST /api/auth/logout` - Invalidation du refresh token
+- `GET /api/auth/me` - Récupération des infos utilisateur
+
+### **Sécurité**
+- Tokens JWT signés avec clé secrète
+- Refresh tokens stockés en base de données
+- Expiration configurable (30 min pour access token, 7 jours pour refresh token)
+
+## 📝 API Feedback (CRUD Complet)
+
+### **Endpoints**
+| Méthode | Endpoint                | Description                          |
+|---------|-------------------------|--------------------------------------|
+| POST    | `/api/feedback`         | Soumission d'un nouveau retour       |
+| GET     | `/api/feedback`         | Liste tous les retours               |
+| GET     | `/api/feedback/{id}`    | Détails d'un retour spécifique       |
+| PUT     | `/api/feedback/{id}`    | Mise à jour d'un retour              |
+| DELETE  | `/api/feedback/{id}`    | Suppression d'un retour              |
+
+### **Fonctionnalités Spéciales**
+
+- **Traitement vocal** : Transcription automatique des enregistrements
+- **Traduction** : Conversion des retours en français si soumis en langue locale
+- **Validation** : Modèles Pydantic stricts pour les entrées/sorties
+
+## ⏰ API Rappels (CRUD Complet)
+
+### **Endpoints**
+| Méthode | Endpoint                | Description                          |
+|---------|-------------------------|--------------------------------------|
+| POST    | `/api/reminders`        | Création d'un nouveau rappel         |
+| GET     | `/api/reminders`        | Liste tous les rappels               |
+| GET     | `/api/reminders/{id}`   | Détails d'un rappel spécifique       |
+| PUT     | `/api/reminders/{id}`   | Mise à jour d'un rappel              |
+| DELETE  | `/api/reminders/{id}`   | Suppression d'un rappel              |
+
+### **Fonctionnalités Spéciales**
+- **Planification flexible** : Dates/heures configurables
+- **Multi-canaux** : Rappels par SMS, appel IVR ou email
+- **Statut de livraison** : Suivi de l'état des rappels
+
+## 🗃️ Nouveaux Modèles de Données
+
+### **Feedback**
+```python
+class FeedbackCreate(BaseModel):
+    id = Column(Integer, primary_key=True, index=True)
+    patient_id = Column(String, index=True, nullable=True)
+    patient_name = Column(String, index=True, nullable=False)
+    age = Column(Integer, nullable=False)
+    gender = Column(String, nullable=False)
+    phone_number = Column(String, nullable=True)
+    condition = Column(String, nullable=False)
+    treatment_satisfaction = Column(Integer, nullable=False)
+    communication_rating = Column(Integer, nullable=False)
+    facility_rating = Column(Integer, nullable=False)
+    overall_experience = Column(Integer, nullable=False)
+    recommendation_likelihood = Column(Integer, nullable=False)
+    feedback_date = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    comments = Column(String, nullable=False)
+    language = Column(String, nullable=False)
+    submission_method = Column(String, nullable=False)  # Store as string, validated by enum
+    sentiment = Column(String, nullable=True)  # Store as string, validated by enum
+    audio_url = Column(String, nullable=True)
+    emoji_rating = Column(String, nullable=True)
+    is_synced = Column(Boolean, default=False, nullable=False)
+
+class FeedbackResponse(BaseModel):
+    id: int
+    patient_id: str
+    language: str
+    content: Optional[str]
+    rating: Optional[int]
+    processed: bool
+    comments: Optional[str]  # Texte transcrit/traduit
+```
+
+### **Reminder**
+```python
+class ReminderCreate(BaseModel):
+    patient_id: str
+    message: str
+    language: str
+    scheduled_time: datetime
+    phone_number: str
+    email: Optional[str]
+
+class ReminderResponse(BaseModel):
+    id: int
+    status: str  # pending/sent/failed
+    
+  ```
+## 🔧 Configuration Requise
+Nouvelles Variables d'Environnement
+```bash
+# Authentification
+SECRET_KEY="votre_cle_secrete"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_MINUTES=10080  # 7 jours
+
+# Google Speech-to-Text
+GOOGLE_APPLICATION_CREDENTIALS="chemin/vers/credentials.json"
+```
 ## 🛠️ Pile Technologique
 
 ### **Backend**

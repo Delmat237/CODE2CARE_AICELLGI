@@ -1,4 +1,3 @@
-# models/reminder.py - Pydantic models for reminder data
 from pydantic import BaseModel, Field
 from datetime import datetime
 

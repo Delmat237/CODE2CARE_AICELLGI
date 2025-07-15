@@ -1,11 +1,9 @@
 # schemas/feedback.py
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 from typing import Optional
 from enum import Enum
-
-Base = declarative_base()
+from database import Base
 
 class SubmissionMethod(Enum):
     WEB = "web"
