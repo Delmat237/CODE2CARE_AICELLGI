@@ -7,7 +7,6 @@ from utils.twilio_client import send_sms, send_ivr
 from utils.email_client import send_email
 import asyncio
 from datetime import datetime, timezone
-from utils.auth import get_current_user
 from typing import Dict, Any, Union, List
 from pydantic import BaseModel
 
@@ -107,6 +106,8 @@ async def send_reminder(reminder_id: int, db: Session):
         if reminder:
             reminder.status = "failed"
             db.commit()
+    finally:
+        db.close()
 
 @router.get("", response_model=StandardResponse)
 def get_all_reminders(db: Session = Depends(get_db)):

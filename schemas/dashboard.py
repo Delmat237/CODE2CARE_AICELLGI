@@ -8,4 +8,4 @@ class DashboardStatsResponse(BaseModel):
     reminders_by_status: Dict[str, int]  
 
     class Config:
-        orm_mode = True
+       from_attributes = True

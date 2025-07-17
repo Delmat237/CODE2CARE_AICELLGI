@@ -7,6 +7,9 @@ from utils.auth import get_current_user
 from sqlalchemy.exc import IntegrityError
 from typing import Dict, Any, Union, List
 from pydantic import BaseModel
+from utils.twilio_client import send_sms
+from utils.email_client import send_email
+from fastapi import status
 
 router = APIRouter()
 
@@ -28,18 +31,52 @@ def create_response(
     }
 
 @router.post("", response_model=StandardResponse, status_code=status.HTTP_201_CREATED)
-def create_patient(patient: PatientCreate, db: Session = Depends(get_db)):
+async def create_patient(patient: PatientCreate, db: Session = Depends(get_db)):
     try:
         db_patient = Patient(**patient.dict(exclude_unset=True))
         db.add(db_patient)
         db.commit()
         db.refresh(db_patient)
+         # Envoie du code (external_id) au patient
+        if db_patient.email:
+            email_subject = "Bienvenue à l'Hôpital Général de Douala"
+            email_body = f"""
+            Cher(e) {db_patient.name},
+
+            Bienvenue dans notre système ! Votre inscription est confirmée avec l'email {db_patient.email} et le numero de telephone
+            {db_patient.phone_number} . Nous sommes ravis de vous compter parmi nous.
+
+            Votre code de connexion est {db_patient.external_id}.
+            Ce code est unique et vous permettra d'accéder à votre compte patient.
+            Ne partagez pas ce code avec d'autres personnes pour garantir la sécurité de vos informations médicales.
+            Si vous avez des questions, n'hésitez pas à nous contacter.
+
+            
+            Cordialement,
+            L'équipe de l'Hôpital Général de Douala
+            """
+            
+            try:
+                await send_email(db_patient.email, email_subject, email_body)  # Attend la coroutine
+            except Exception as e:
+                print(f"Failed to send email: {str(e)}")  # Log error, continue
+
+        #   # Send welcome message via Twilio (SMS)
+        # if db_patient.phone_number:
+        #     sms_message = f"Bienvenue {db_patient.name} ! Votre inscription à l'Hôpital Général de Douala est confirmée. Merci !"
+        #     try:
+        #         await send_sms(db_patient.phone_number, sms_message)  # Attend la coroutine
+        #     except Exception as e:
+        #         print(f"Failed to send SMS: {str(e)}")  # Log error, continue
+
         return create_response(
             success=True,
             message="Patient created successfully",
             data=db_patient,
             status_code=status.HTTP_201_CREATED
         )
+    
+
     except IntegrityError as e:
         db.rollback()
         if "unique constraint" in str(e.orig) and "ix_patients_email" in str(e.orig):

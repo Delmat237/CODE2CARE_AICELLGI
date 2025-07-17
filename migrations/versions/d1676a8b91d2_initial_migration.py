@@ -1,8 +1,8 @@
-"""add_created_at_to_reminders
+"""Initial migration
 
-Revision ID: fa53de3f97cf
-Revises: 626c31b95e92
-Create Date: 2025-07-17 12:01:42.094479
+Revision ID: d1676a8b91d2
+Revises: 
+Create Date: 2025-07-17 18:03:56.677047
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fa53de3f97cf'
-down_revision = '626c31b95e92'
+revision = 'd1676a8b91d2'
+down_revision = None
 branch_labels = None
 depends_on = None
 

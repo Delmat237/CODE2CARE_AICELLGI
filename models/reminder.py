@@ -9,8 +9,8 @@ class ReminderBase(BaseModel):
     scheduled_time: datetime = Field(..., example="2025-07-14T10:00:00Z")
     phone_number: str = Field(..., example="+237XXXXXXXX")
     email: str = Field(None, example="azangueleonel9@gmail.com")
-    channel: str = Field(..., example="sms", enum=["sms", "ivr", "email"])
-    create_at: str
+    channel: str = Field(..., example="email", enum=["sms", "ivr", "email"])
+
 
 class ReminderCreate(ReminderBase):
     @validator('patient_id')

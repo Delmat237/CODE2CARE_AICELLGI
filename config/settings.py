@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     CORS_ALLOW_METHODS: list[str] = ["*"]
     CORS_ALLOW_HEADERS: list[str] = ["*"]
 
+    # Optional: Google Cloud or Logging Settings
+    GOOGLE_APPLICATION_CREDENTIALS: str
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

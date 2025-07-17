@@ -10,6 +10,7 @@ from utils.auth import get_current_user, get_current_admin
 from datetime import datetime
 from typing import Dict, Any, Union, List
 from pydantic import BaseModel
+from sqlalchemy import func
 
 router = APIRouter()
 
@@ -33,38 +34,44 @@ def create_response(
 @router.get("/stats", response_model=StandardResponse)
 def get_dashboard_stats(db: Session = Depends(get_db), _: str = Depends(get_current_admin)):
     """
-    Retrieve global statistics for feedback and reminders.
-    Returns standardized response with success, message, and data fields.
+        Retrieve global statistics for feedback and reminders.
+        Returns standardized response with success, message, and data fields.
     """
     try:
+        # Total feedback
+        total_feedback = db.query(Feedback).count()
+        # Feedback by rating
+        feedback_by_rating_query = db.query(Feedback.overall_experience, func.count(Feedback.overall_experience)).group_by(Feedback.overall_experience).all()
+        feedback_by_rating = {rating: count for rating, count in feedback_by_rating_query if rating is not None}
+        feedback_by_rating = {i: feedback_by_rating.get(i, 0) for i in range(1, 6)}
+        # Reminders by status
+        reminders_by_status_query = db.query(Reminder.status, func.count(Reminder.status)).group_by(Reminder.status).all()
+        reminders_by_status = {status: count for status, count in reminders_by_status_query if status in ["sent", "failed", "pending"]}
+        reminders_by_status = {"sent": reminders_by_status.get("sent", 0), "failed": reminders_by_status.get("failed", 0), "pending": reminders_by_status.get("pending", 0)}
+        # Total reminders
+        total_reminders = sum(reminders_by_status.values())
+
         stats = DashboardStatsResponse(
-            total_feedback=db.query(Feedback).count(),
-            total_reminders=db.query(Reminder).count(),
-            feedback_by_rating={
-                i: db.query(Feedback).filter(Feedback.overall_experience == i).count()
-                for i in range(1, 6)
-            },
-            reminders_by_status={
-                "sent": db.query(Reminder).filter(Reminder.status == "sent").count(),
-                "failed": db.query(Reminder).filter(Reminder.status == "failed").count(),
-                "pending": db.query(Reminder).filter(Reminder.status == "pending").count()
-            }
+            total_feedback=total_feedback,
+            total_reminders=total_reminders,
+            feedback_by_rating=feedback_by_rating,
+            reminders_by_status=reminders_by_status
         )
         return create_response(
             success=True,
             message="Dashboard statistics retrieved successfully",
-            data=stats
+            data=stats.dict()
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=create_response(
-                success=False,
-                message=f"Error retrieving dashboard stats: {str(e)}",
-                data=None
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=create_response(
+                    success=False,
+                    message=f"Error retrieving dashboard stats: {str(e)}",
+                    data=None
+                )
             )
-        )
-
+    
 @router.get("/feedback", response_model=StandardResponse)
 def get_feedback_analytics(
     start_date: str = None,

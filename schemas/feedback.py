@@ -20,7 +20,7 @@ class Sentiment(Enum):
 class Feedback(Base):
     __tablename__ = "feedbacks"
 
-    id = Column(String, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     patient_id = Column(String, nullable=True)
     patient_name = Column(String, index=True, nullable=False)
     age = Column(Integer, nullable=False)

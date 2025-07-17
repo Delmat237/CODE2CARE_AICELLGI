@@ -13,4 +13,4 @@ class PatientAuthRequest(BaseModel):
         return v
 
     class Config:
-        rom_attributes = True  
+        from_attributes = True  

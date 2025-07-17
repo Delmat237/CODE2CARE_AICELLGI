@@ -96,10 +96,11 @@ async def register(
 
     Bienvenue dans notre système ! Votre inscription est confirmée avec l'email {db_user.email}. Nous sommes ravis de vous compter parmi nous.
 
-    Votre code de connexion est {db_user.external_id}.
+    
     Cordialement,
     L'équipe de l'Hôpital Général de Douala
     """
+    #Votre code de connexion est {db_user.external_id}.
     try:
         await send_email(db_user.email, email_subject, email_body)  # Attend la coroutine
     except Exception as e:

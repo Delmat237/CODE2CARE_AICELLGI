@@ -12,6 +12,7 @@ from utils.auth import get_current_user
 from typing import Dict, Any, Union, List
 from pydantic import BaseModel
 from google.oauth2 import service_account
+from utils.speech_client import get_speech_client
 
 router = APIRouter()
 
@@ -34,12 +35,7 @@ def create_response(
 
 # Initialize Google Cloud Speech client safely
 try:
-    if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
-        client = speech.SpeechClient()
-    else:
-        creds_path = os.path.join(os.path.dirname(__file__), "..", "google-credentials.json")
-        credentials = service_account.Credentials.from_service_account_file(creds_path)
-        client = speech.SpeechClient(credentials=credentials)
+        client = get_speech_client()
 except Exception as e:
     client = None
     print(f"Warning: Failed to initialize SpeechClient - {str(e)}")
