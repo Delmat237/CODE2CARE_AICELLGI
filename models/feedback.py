@@ -50,4 +50,4 @@ class FeedbackResponse(FeedbackBase):
     processed: bool = Field(False, example=False)
 
     class Config:
-        orm_mode = True
+        from_attributes = True

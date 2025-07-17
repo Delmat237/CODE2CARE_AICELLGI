@@ -10,6 +10,7 @@ class ReminderBase(BaseModel):
     phone_number: str = Field(..., example="+237XXXXXXXX")
     email: str = Field(None, example="azangueleonel9@gmail.com")
     channel: str = Field(..., example="sms", enum=["sms", "ivr", "email"])
+    create_at: str
 
 class ReminderCreate(ReminderBase):
     @validator('patient_id')
@@ -27,4 +28,4 @@ class ReminderResponse(ReminderBase):
     status:str | None = None
 
     class Config:
-        orm_mode = True
+            from_attributes = True

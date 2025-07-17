@@ -14,7 +14,7 @@ async def send_email(email: str, subject: str, message: str) -> bool:
     try:
         with smtplib.SMTP(settings.SMTP_HOST, int(settings.SMTP_PORT)) as server:
             server.starttls()
-            server.login(settings.SMTP_USER, settings.SMTP_PASS)
+            server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
             server.send_message(msg)
         logger.info(f"Email sent to {email}")
         return True

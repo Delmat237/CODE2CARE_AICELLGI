@@ -24,7 +24,7 @@ class PatientResponse(PatientBase):
     registration_date: datetime  # Correspond à Column(DateTime)
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
     # Méthode optionnelle pour formater registration_date en chaîne si nécessaire
     def dict(self, *args, **kwargs):
