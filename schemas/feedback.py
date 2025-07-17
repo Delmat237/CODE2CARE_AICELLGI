@@ -1,4 +1,3 @@
-# schemas/feedback.py
 from sqlalchemy import Column, Integer, String, DateTime, Boolean,ForeignKey
 from sqlalchemy.sql import func
 from typing import Optional
@@ -21,8 +20,8 @@ class Sentiment(Enum):
 class Feedback(Base):
     __tablename__ = "feedbacks"
 
-    id = Column(Integer, primary_key=True, index=True)
-    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=True)
+    id = Column(String, primary_key=True, index=True)
+    patient_id = Column(String, nullable=True)
     patient_name = Column(String, index=True, nullable=False)
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
@@ -42,4 +41,3 @@ class Feedback(Base):
     emoji_rating = Column(String, nullable=True)
     is_synced = Column(Boolean, default=False, nullable=False)
 
-    patient = relationship("Patient", backref="feedbacks")

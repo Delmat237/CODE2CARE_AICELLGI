@@ -6,7 +6,25 @@
 
 > **Backend API pour la gestion des retours patients et rappels à Douala General Hospital**
 
+## 📌 Table of Contents
+- [Fonctionnalités](#-fonctionnalités)
+    - [Fonctionnalités principales](#fonctionnalités-principales)
+    - [*Intégration et API](#intégration-et-api)
+- [Architecture du systeme](#-architecture)
+- [Arborescence expliquée](#-arborescence-expliquée)
+- [ Vue d'Ensemble des Fichiers et Dossiers](#-vue-densemble-des-fichiers-et-dossiers)
+- [roadmap](#-prochaines-étapes-dici-le-18-juillet-2025)
+- [Mise à jour 1](#-mises-à-jour-14-juillet-2024)
+- [Mise à jour 2](#-nouveautés-mise-à-jour-16-juillet-2024)
+- [Pile Technologique](#-pile-technologique)
+- [Modèle de données](#-modèles-de-données)
+- [Setup Guide](#-démarrage)
+- [Utilisation](#-utilisation)
+- [How to Contribute](#-contribution)
+
+
 Une API backend robuste et scalable développée avec FastAPI pour collecter les retours patients, gérer les rappels automatisés, et analyser les données dans un environnement multilingue (anglais, français, Douala, Bassa, Ewondo), optimisée pour les zones à faible bande passante.
+
 
 ## 🚀 Fonctionnalités
 
@@ -24,7 +42,6 @@ Une API backend robuste et scalable développée avec FastAPI pour collecter les
 - **Support multi-format** - JSON pour les API.
 
 ## 🏗️ Architecture
-
 ```
 ┌────────────────────┐    ┌────────────────────┐
 │   API Backend      │    │   Base de données  │
