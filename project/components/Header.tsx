@@ -10,7 +10,7 @@ export default function Header() {
     <header className="bg-blue-600 text-white p-4">
       <nav className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-xl font-bold">
-          Mon App
+          FEEDBACK-APP
         </Link>
         <ul className="flex space-x-4">
           <li>

@@ -1,8 +1,7 @@
-
-
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -28,20 +27,68 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        external_id: { label: "code de connexion", type: "text", placeholder: "Entrez votre code" },
+        email: { label: "Email", type: "email", placeholder: "Entrez votre email" },
+        password: { label: "Password", type: "password", placeholder: "Entrez votre mot de passe" },
+      },
+      async authorize(credentials: {
+        external_id: any; exter?: string; email?: string; password?: string 
+} | undefined) {
+        if (!credentials) {
+          return null;
+        }
+        console.log("voici mes credentials",credentials)
+        // Send credentials to FastAPI backend
+        const res = await fetch("http://192.168.1.167:8000/api/auth/patient", {
+          method: "POST",
+          body: JSON.stringify({
+            external_id:"P000001",
+            email: "azangueleonel9@gmail.com"
+         
+          }),
+          headers: { "Content-Type": "application/json" },
+        });
+        
+
+        const user = await res.json();
+
+        // If authentication is successful, return user object
+        if (res.ok && user) {
+          return {
+            id: user.id,
+            matricule: user.matricule,
+            email: user.email,
+            accessToken: user.access_token, // Assuming FastAPI returns a JWT
+          };
+        }
+
+        // Return null if authentication fails
+        return null;
+      },
+    }),
   ],
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       // Transfère toutes les infos utilisateur à la session
       if (session.user) {
-        session.user.id = token.sub || user?.id;
-        session.user.image = token.picture || user?.image;
+        session.user.id = token.sub || "";
+        session.user.image = token.picture || null;
+        session.user.external_id = token.matricule as string | undefined;
+        session.user.email = token.email || null;
+        session.accessToken = token.accessToken as string | undefined;
       }
       return session;
     },
-    async jwt({ token, user, account, profile }) {
-      // Stocke l'image de profil dans le token
+    async jwt({ token, user }) {
+      // Stocke l'image de profil et credentials dans le token
       if (user) {
         token.picture = user.image;
+        token.matricule = user.external_id;
+        token.email = user.email;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
