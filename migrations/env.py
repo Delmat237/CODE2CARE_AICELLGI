@@ -13,6 +13,7 @@ from schemas.feedback import Feedback
 from schemas.reminder import Reminder
 from schemas.user import User
 from schemas.refresh_token import RefreshToken  
+from schemas.patient import Patient  
 
 config = context.config
 

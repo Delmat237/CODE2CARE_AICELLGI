@@ -51,226 +51,271 @@ Track1/backend/
 │
 ├── main.py                  # Point d'entrée de l'application FastAPI
 ├── config/                  # Configuration et variables d'environnement
-│   └── settings.py          # Paramètres globaux (BaseSettings avec Pydantic)
+│   └── settings.py          # Paramètres globaux avec Pydantic BaseSettings
 ├── database/                # Gestion de la base de données
-│   ├── __init__.py          # Initialisation du module (vide ou import)
-│   ├── database.py          # Connexion SQLAlchemy et session management
-│   └── migrations/          # Migrations Alembic pour la base de données
-│       ├── env.py           # Environnement de migration
+│   ├── init.py          # Initialisation du module
+│   ├── database.py          # Connexion SQLAlchemy et gestion des sessions
+│   └── migrations/          # Scripts de migration Alembic
+│       ├── env.py           # Configuration de l'environnement de migration
 │       ├── script.py.mako   # Modèle de script de migration
-│       └── versions/        # Versions des migrations (générées par Alembic)
-├── models/                  # Schémas Pydantic pour les données
-│   ├── __init__.py          # Initialisation du module
-│   ├── feedback.py          # Modèles pour les retours patients
-│   └── reminder.py          # Modèles pour les rappels
-├── schemas/                 # Modèles SQLAlchemy pour la persistance
-│   ├── __init__.py          # Initialisation du module
-│   ├── feedback.py          # Table Feedback dans PostgreSQL
-│   └── reminder.py          # Table Reminder dans PostgreSQL
+│       └── versions/        # Versions de migration générées
+├── models/                  # Modèles SQLAlchemy pour la persistance
+│   ├── init.py          # Initialisation du module
+│   ├── user.py              # Modèle Utilisateur
+│   ├── patient.py           # Modèle Patient
+│   ├── feedback.py          # Modèle Retour
+│   └── reminder.py          # Modèle Rappel
+├── schemas/                 # Schémas Pydantic pour la validation
+│   ├── init.py          # Initialisation du module
+│   ├── user.py              # Schéma Utilisateur
+│   ├── patient.py           # Schéma Patient
+│   ├── feedback.py          # Schéma Retour
+│   └── reminder.py          # Schéma Rappel
 ├── routers/                 # Définitions des endpoints API
-│   ├── __init__.py          # Initialisation du module
-│   ├── feedback.py          # Endpoints pour la soumission de retours
-│   └── reminders.py         # Endpoints pour la planification de rappels
-├── utils/                   # Utilitaires et services externes
-│   ├── __init__.py          # Initialisation du module
+│   ├── init.py          # Initialisation du module
+│   ├── auth.py              # Endpoints d'authentification
+│   ├── feedback.py          # Endpoints de retours
+│   ├── reminders.py         # Endpoints de rappels
+│   └── dashboard.py         # Endpoints d'analytique
+├── utils/                   # Utilitaires et intégrations externes
+│   ├── init.py          # Initialisation du module
 │   ├── twilio_client.py     # Intégration Twilio pour SMS/IVR
-│   └── email_client.py      # Intégration SMTP/SendGrid pour emails
+│   └── email_client.py      # Intégration SMTP pour email
 ├── tests/                   # Tests unitaires et d'intégration
-│   ├── __init__.py          # Initialisation du module
-│   ├── test_feedback.py     # Tests pour les endpoints feedback
-│   ├── test_reminders.py    # Tests pour les endpoints reminders
+│   ├── init.py          # Initialisation du module
+│   ├── test_auth.py         # Tests d'authentification
+│   ├── test_feedback.py     # Tests des endpoints de retours
+│   ├── test_reminders.py    # Tests des endpoints de rappels
 │   └── integration/         # Tests d'intégration (à développer)
 ├── alembic.ini              # Configuration principale d'Alembic
-├── requirements.txt         # Liste des dépendances Python
+├── requirements.txt         # Dépendances Python
 ├── .env.example             # Exemple de fichier de variables d'environnement
 ├── docker-compose.yml       # Configuration Docker pour le développement
 ├── docker-compose.prod.yml  # Configuration Docker pour la production
-└── README.md # document d'explication
-
+└── README.md                # Documentation du projet
 ```
 
-## 📋 Explication des dossiers et fichiers
+
+## 📋 Vue d'Ensemble des Fichiers et Dossiers
 
 ### **`main.py`**
+- **Rôle** : Point d'entrée de l'application FastAPI avec configuration CORS, inclusion des routers, et lancement avec Uvicorn (hôte : `0.0.0.0`, port : `8000`).
 
-- **Rôle** : Point d'entrée de l'application FastAPI. Configure CORS, inclut les routers, et lance le serveur avec Uvicorn.
-- **Détails** : Définit l'host (`0.0.0.0`) et le port (`8000`) pour une accessibilité externe.
-
-### **`config/`**
-
-- **settings.py** : Contient les configurations via Pydantic (`DATABASE_URL`, `TWILIO_*`, `SENDGRID_API_KEY`, etc.) chargées depuis `.env`.
+### **`config/settings.py`**
+- **Rôle** : Gère les configurations avec Pydantic (`DATABASE_URL`, `TWILIO_*`, `SMTP_*`, `SECRET_KEY`, etc.) chargées depuis `.env`.
 
 ### **`database/`**
-
-- **database.py** : Gère la connexion à PostgreSQL avec SQLAlchemy et fournit une dépendance `get_db` pour les sessions.
-- **migrations/** : Utilise Alembic pour gérer les schémas de la base de données (création de tables `feedbacks` et `reminders`).
+- **database.py** : Gère la connexion à PostgreSQL avec SQLAlchemy et fournit la dépendance `get_db`.
+- **migrations/** : Utilise Alembic pour gérer les schémas de la base de données (ex. `users`, `patients`, `feedbacks`, `reminders`).
 
 ### **`models/`**
-
-- **feedback.py** : Définit les schémas Pydantic (`FeedbackCreate`, `FeedbackResponse`) pour valider les données d'entrée/sortie des retours.
-- **reminder.py** : Définit les schémas Pydantic (`ReminderCreate`, `ReminderResponse`) pour les rappels.
+- **user.py** : Modèle SQLAlchemy pour la table `users`.
+- **patient.py** : Modèle SQLAlchemy pour la table `patients`.
+- **feedback.py** : Modèle SQLAlchemy pour la table `feedbacks`.
+- **reminder.py** : Modèle SQLAlchemy pour la table `reminders`.
 
 ### **`schemas/`**
-
-- **feedback.py** : Modèle SQLAlchemy pour la table `feedbacks` avec colonnes comme `patient_id`, `language`, etc.
-- **reminder.py** : Modèle SQLAlchemy pour la table `reminders` avec colonnes comme `scheduled_time`, `email`, etc.
+- **user.py** : Schéma Pydantic pour la validation des données utilisateur.
+- **patient.py** : Schéma Pydantic pour la validation des données patient.
+- **feedback.py** : Schéma Pydantic pour la validation des données de retour.
+- **reminder.py** : Schéma Pydantic pour la validation des données de rappel.
 
 ### **`routers/`**
-
-- **feedback.py** : Contient l'endpoint `POST /api/feedback` pour soumettre des retours.
-- **reminders.py** : Contient l'endpoint `POST /api/reminders` pour planifier des rappels (SMS/IVR/email).
+- **auth.py** : Endpoints pour l'authentification (connexion, inscription, rafraîchissement, déconnexion, profil).
+- **feedback.py** : Endpoints pour les opérations CRUD sur les retours.
+- **reminders.py** : Endpoints pour les opérations CRUD et la planification des rappels.
+- **dashboard.py** : Endpoints pour les analyses administratives.
 
 ### **`utils/`**
-
-- **twilio_client.py** : Intègre Twilio pour envoyer des SMS et initier des appels IVR.
-- **email_client.py** : Intègre SMTP/SendGrid pour envoyer des notifications par email.
+- **twilio_client.py** : Intègre Twilio pour les notifications SMS et IVR.
+- **email_client.py** : Intègre SMTP pour les notifications par email.
 
 ### **`tests/`**
-
-- **test_feedback.py** : Tests unitaires pour l'endpoint de soumission de retours.
-- **test_reminders.py** : Tests unitaires pour l'endpoint de rappels.
+- **test_auth.py** : Tests unitaires pour les endpoints d'authentification.
+- **test_feedback.py** : Tests unitaires pour les endpoints de retours.
+- **test_reminders.py** : Tests unitaires pour les endpoints de rappels.
 - **integration/** : Dossier pour les tests d'intégration (à développer).
 
-### **Fichiers de configuration**
-
-- **alembic.ini** : Configuration principale pour les migrations de la base de données.
-- **requirements.txt** : Liste des dépendances (ex. `fastapi`, `sqlalchemy`, `twilio`, `sendgrid`).
-- **.env.example** : Modèle pour les variables d'environnement avec commentaires.
+### **Fichiers de Configuration**
+- **alembic.ini** : Configuration principale d'Alembic.
+- **requirements.txt** : Liste des dépendances (ex. `fastapi`, `sqlalchemy`, `twilio`, `pydantic`).
+- **.env.example** : Modèle de fichier de variables d'environnement avec commentaires.
 - **docker-compose.yml** : Définit les services (app, PostgreSQL, Redis) pour le développement.
-- **docker-compose.prod.yml** : Configuration pour un environnement de production avec k3s.
+- **docker-compose.prod.yml** : Définit la configuration de production avec k3s.
 
-## ⚙️ Considérations de conception
+## ⚙️ Considérations de Conception
 
-- **Modularité** : Chaque composant (routes, modèles, utilitaires) est isolé pour faciliter les mises à jour.
-- **Scalabilité** : Utilisation de k3s pour une orchestration légère et Redis pour le caching.
-- **Optimisation faible bande passante** : Réponses API compressées (Gzip), gestion asynchrone des tâches.
-- **Sécurité** : Préparation pour JWT et chiffrement TLS (à configurer au niveau du serveur).
+- **Modularité** : Composants isolés (routes, modèles, utilitaires) pour une maintenance facile.
+- **Scalabilité** : k3s pour une orchestration légère et Redis pour le cache.
+- **Optimisation Faible Bande Passante** : Réponses compressées (Gzip), gestion asynchrone.
+- **Sécurité** : Authentification JWT, chiffrement TLS (à configurer), limitation de taux.
 
-## ⏰ Prochaines étapes (jusqu'au 18 juillet 2025)
-
+## ⏰ Prochaines Étapes (d'ici le 18 juillet 2025)
 - Implémenter les tests d'intégration dans `tests/integration/`.
-- Ajouter la transcription vocale dans `utils/` (Google Speech-to-Text).
+- Ajouter la transcription vocale dans `utils/` avec Google Speech-to-Text.
 - Configurer l'authentification JWT dans `main.py` et `routers/`.
-- Documenter les endpoints dans un fichier `openapi.json` généré par FastAPI.
+- Générer `openapi.json` pour la documentation des endpoints.
 
-## 🚀 Nouveautés (Mise à jour 14 Juillet 2024)
-
-### **Fonctionnalités Ajoutées**
-- **Système d'authentification complet** avec JWT (access + refresh tokens)
-- **CRUD complet** pour les retours patients (feedback)
-- **CRUD complet** pour les rappels (reminders)
-- **Initialisation du Traitement vocal** intégré via Google Speech-to-Text
+## 🚀 Mises à Jour (14 juillet 2024)
+### Fonctionnalités Ajoutées
+- **Système d'Authentification Complet** : JWT avec tokens d'accès et de rafraîchissement.
+- **CRUD Complet** : Pour les retours et rappels.
+- **Traitement Vocal Initial** : Intégré avec Google Speech-to-Text.
 
 ## 🔐 Authentification
 
-### **Endpoints**
-- `POST /api/auth/login` - Authentification avec username/password
-- `POST /api/auth/register` - Creation d'un compte
-- `POST /api/auth/refresh` - Rafraîchissement du token
-- `POST /api/auth/logout` - Invalidation du refresh token
-- `GET /api/auth/me` - Récupération des infos utilisateur
+### Endpoints
+- `POST /api/auth/login` - Authentification avec nom d'utilisateur/mot de passe.
+- `POST /api/auth/register` - Création d'un compte utilisateur.
+- `POST /api/auth/refresh` - Rafraîchissement du token d'accès.
+- `POST /api/auth/logout` - Invalidation du token de rafraîchissement.
+- `GET /api/auth/me` - Récupération des informations utilisateur.
 
-### **Sécurité**
-- Tokens JWT signés avec clé secrète
-- Refresh tokens stockés en base de données
-- Expiration configurable (30 min pour access token, 7 jours pour refresh token)
+### Sécurité
+- Tokens JWT signés avec une clé secrète.
+- Tokens de rafraîchissement stockés dans la table `refresh_tokens`.
+- Expiration configurable (30 minutes pour le token d'accès, 7 jours pour le token de rafraîchissement).
 
-## 📝 API Feedback (CRUD Complet)
+## 📝 API Retours (CRUD Complet)
 
-### **Endpoints**
-| Méthode | Endpoint                | Description                          |
-|---------|-------------------------|--------------------------------------|
-| POST    | `/api/feedback`         | Soumission d'un nouveau retour       |
-| GET     | `/api/feedback`         | Liste tous les retours               |
-| GET     | `/api/feedback/{id}`    | Détails d'un retour spécifique       |
-| PUT     | `/api/feedback/{id}`    | Mise à jour d'un retour              |
-| DELETE  | `/api/feedback/{id}`    | Suppression d'un retour              |
+### Endpoints
+| Méthode | Endpoint            | Description                  |
+|---------|---------------------|------------------------------|
+| POST    | `/api/feedback`     | Soumettre un nouveau retour  |
+| GET     | `/api/feedback`     | Lister tous les retours      |
+| GET     | `/api/feedback/{id}`| Récupérer un retour spécifique |
+| PUT     | `/api/feedback/{id}`| Mettre à jour un retour      |
+| DELETE  | `/api/feedback/{id}`| Supprimer un retour          |
 
-### **Fonctionnalités Spéciales**
-
-- **Traitement vocal** : Transcription automatique des enregistrements
-- **Traduction** : Conversion des retours en français si soumis en langue locale
-- **Validation** : Modèles Pydantic stricts pour les entrées/sorties
+### Fonctionnalités Spéciales
+- **Traitement Vocal** : Transcription automatique des enregistrements audio.
+- **Traduction** : Conversion des retours en langue locale vers le français.
+- **Validation** : Modèles Pydantic stricts pour les entrées/sorties.
 
 ## ⏰ API Rappels (CRUD Complet)
 
-### **Endpoints**
-| Méthode | Endpoint                | Description                          |
-|---------|-------------------------|--------------------------------------|
-| POST    | `/api/reminders`        | Création d'un nouveau rappel         |
-| GET     | `/api/reminders`        | Liste tous les rappels               |
-| GET     | `/api/reminders/{id}`   | Détails d'un rappel spécifique       |
-| PUT     | `/api/reminders/{id}`   | Mise à jour d'un rappel              |
-| DELETE  | `/api/reminders/{id}`   | Suppression d'un rappel              |
+### Endpoints
+| Méthode | Endpoint            | Description                  |
+|---------|---------------------|------------------------------|
+| POST    | `/api/reminders`    | Créer un nouveau rappel      |
+| GET     | `/api/reminders`    | Lister tous les rappels      |
+| GET     | `/api/reminders/{id}`| Récupérer un rappel spécifique |
+| PUT     | `/api/reminders/{id}`| Mettre à jour un rappel      |
+| DELETE  | `/api/reminders/{id}`| Supprimer un rappel          |
 
-### **Fonctionnalités Spéciales**
-- **Planification flexible** : Dates/heures configurables
-- **Multi-canaux** : Rappels par SMS, appel IVR ou email
-- **Statut de livraison** : Suivi de l'état des rappels
+### Fonctionnalités Spéciales
+- **Planification Flexible** : Dates et heures configurables.
+- **Multi-Canal** : Envoi par SMS, IVR ou email.
+- **Statut de Livraison** : Suivi de l'état des rappels (en attente, envoyé, échoué).
 
-## 🗃️ Nouveaux Modèles de Données
+## 👤 API Gestion des Patients (CRUD Complet)
 
-### **Feedback**
-```python
-class FeedbackCreate(BaseModel):
-    id = Column(Integer, primary_key=True, index=True)
-    patient_id = Column(String, index=True, nullable=True)
-    patient_name = Column(String, index=True, nullable=False)
-    age = Column(Integer, nullable=False)
-    gender = Column(String, nullable=False)
-    phone_number = Column(String, nullable=True)
-    condition = Column(String, nullable=False)
-    treatment_satisfaction = Column(Integer, nullable=False)
-    communication_rating = Column(Integer, nullable=False)
-    facility_rating = Column(Integer, nullable=False)
-    overall_experience = Column(Integer, nullable=False)
-    recommendation_likelihood = Column(Integer, nullable=False)
-    feedback_date = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    comments = Column(String, nullable=False)
-    language = Column(String, nullable=False)
-    submission_method = Column(String, nullable=False)  # Store as string, validated by enum
-    sentiment = Column(String, nullable=True)  # Store as string, validated by enum
-    audio_url = Column(String, nullable=True)
-    emoji_rating = Column(String, nullable=True)
-    is_synced = Column(Boolean, default=False, nullable=False)
+### Endpoints
+| Méthode | Endpoint            | Description                  |
+|---------|---------------------|------------------------------|
+| POST    | `/api/patients`     | Créer un nouveau patient     |
+| GET     | `/api/patients`     | Lister tous les patients     |
+| GET     | `/api/patients/{id}`| Récupérer un patient spécifique |
+| PUT     | `/api/patients/{id}`| Mettre à jour un patient     |
+| DELETE  | `/api/patients/{id}`| Supprimer un patient         |
 
-class FeedbackResponse(BaseModel):
-    id: int
-    patient_id: str
-    language: str
-    content: Optional[str]
-    rating: Optional[int]
-    processed: bool
-    comments: Optional[str]  # Texte transcrit/traduit
-```
+### Fonctionnalités Spéciales
+- **Associations** : Liens avec les retours et rappels.
+- **Validation** : Vérification des emails et numéros de téléphone.
+- **Historique** : Suivi des interactions patient.
 
-### **Reminder**
-```python
-class ReminderCreate(BaseModel):
-    patient_id: str
-    message: str
-    language: str
-    scheduled_time: datetime
-    phone_number: str
-    email: Optional[str]
+## 📊 API Tableau de Bord (Admin/Analytique)
 
-class ReminderResponse(BaseModel):
-    id: int
-    status: str  # pending/sent/failed
-    
-  ```
-## 🔧 Configuration Requise
-Nouvelles Variables d'Environnement
+### Endpoints
+| Méthode | Endpoint            | Description                  |
+|---------|---------------------|------------------------------|
+| GET     | `/api/dashboard/stats` | Récupérer les statistiques globales |
+| GET     | `/api/dashboard/feedback` | Analyser les retours par catégorie |
+| GET     | `/api/dashboard/reminders` | Analyser les rappels par statut |
+
+### Fonctionnalités Spéciales
+- **Filtrage** : Par date, patient ou statut.
+- **Visualisation** : Données agrégées pour les rapports.
+- **Accès Restreint** : Réservé aux utilisateurs avec rôle "admin".
+
+## 🗃️ Modèles de Données
+
+### **Utilisateur**
+- **Champs** : `id`, `username`, `email`, `phone_number`, `hashed_password`, `role`, `is_active`.
+
+### **Patient**
+- **Champs** : `id`, `user_id` (optionnel), `name`, `email`, `phone_number`, `age`, `gender`, `condition`, `registration_date`.
+
+### **Retour**
+- **Champs** : `id`, `patient_id`, `patient_name`, `age`, `gender`, `phone_number`, `condition`, `treatment_satisfaction`, `communication_rating`, `facility_rating`, `overall_experience`, `recommendation_likelihood`, `feedback_date`, `comments`, `language`, `submission_method`, `sentiment`, `audio_url`, `emoji_rating`, `is_synced`, `processed`.
+
+### **Rappel**
+- **Champs** : `id`, `patient_id`, `phone_number`, `email`, `message`, `language`, `scheduled_time`, `status`, `channel`.
+
+## 🔧 Prérequis
+
+### Variables d'Environnement
 ```bash
+# Base de Données
+DATABASE_URL=postgresql://user:password@localhost:5432/feedback_db
+
 # Authentification
-SECRET_KEY="votre_cle_secrete"
-ALGORITHM="HS256"
+SECRET_KEY=votre-clé-secrète
+ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 REFRESH_TOKEN_EXPIRE_MINUTES=10080  # 7 jours
 
-# Google Speech-to-Text
-GOOGLE_APPLICATION_CREDENTIALS="chemin/vers/credentials.json"
+# Twilio
+TWILIO_ACCOUNT_SID=votre_sid
+TWILIO_AUTH_TOKEN=votre_token
+TWILIO_PHONE_NUMBER=+237XXXXXXXX
+
+# SMTP
+SMTP_USER=votre_email@gmail.com
+SMTP_PASS=votre_mot_de_passe_app
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+
+# Google Speech-to-Text (Optionnel)
+GOOGLE_APPLICATION_CREDENTIALS=chemin/vers/credentials.json
 ```
+
+## 🚀 Nouveautés (Mise à jour 16 Juillet 2024)
+
+## 📊 API Tableau de Bord (Admin/Analytics)
+
+### Endpoints
+
+|Méthode|Endpoint|Description|
+|---------|------------------------|--------------------------------------|
+|GET|	/api/dashboard/stats	|Statistiques globales (retours, rappels)|
+|GET	|/api/dashboard/feedback	|Analyse des retours par catégorie|
+|GET|	/api/dashboard/reminders|	Analyse des rappels par statut|
+
+### Fonctionnalités Spéciales
+
+- Filtrage: Par date, patient, ou statut
+- Visualisation: Données agrégées pour rapports
+- Accès restreint: Réservé aux utilisateurs avec rôle "admin"
+- 
+## 👤 API Gestion des Patients
+
+### Endpoints
+
+Méthode	Endpoint	Description
+|---------|------------------------|--------------------------------------|
+|POST	|/api/patients|Création d'un nouveau patient|
+|GET	|/api/patients	|Liste tous les patients|
+|GET	|/api/patients/{id}	|Détails d'un patient spécifique|
+|PUT	|/api/patients/{id}	|Mise à jour d'un patient|
+|DELETE	|/api/patients/{id}	|Suppression d'un patient|
+
+### Fonctionnalités Spéciales
+
+- Association: Lien avec retours et rappels
+- Validation: Vérification des données (email, téléphone)
+- Historique: Suivi des interactions patient
+
 ## 🛠️ Pile Technologique
 
 ### **Backend**

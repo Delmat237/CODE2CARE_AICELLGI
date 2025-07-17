@@ -21,7 +21,7 @@ async def send_sms(phone_number: str, message: str) -> bool:
 async def send_ivr(phone_number: str, message: str) -> bool:
     try:
         call = twilio_client.calls.create(
-            url="http://demo.twilio.com/docs/voice.xml",  # i will Replace with TwiML URL
+            url="http://demo.twilio.com/docs/voice.xml",  # Replace with your TwiML URL
             to=phone_number,
             from_=settings.TWILIO_PHONE_NUMBER
         )

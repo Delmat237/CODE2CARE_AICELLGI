@@ -1,10 +1,10 @@
-# routers/reminders.py
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database.database import get_db, SessionLocal
+from database.database import get_db
 from schemas.reminder import Reminder  # SQLAlchemy model
 from models.reminder import ReminderCreate, ReminderResponse  # Pydantic models
 from utils.twilio_client import send_sms, send_ivr
+from utils.email_client import send_email
 import asyncio
 from datetime import datetime
 from utils.auth import get_current_user
@@ -20,7 +20,7 @@ async def schedule_reminder(reminder: ReminderCreate, db: Session = Depends(get_
 
     # Schedule async task for sending reminder if scheduled time is in the future
     if datetime.utcnow() < db_reminder.scheduled_time:
-        asyncio.create_task(send_reminder(db_reminder.id, db))  # Pass reminder ID and session
+        asyncio.create_task(send_reminder(db_reminder.id, db))
     return db_reminder
 
 async def send_reminder(reminder_id: int, db: Session):
@@ -29,7 +29,14 @@ async def send_reminder(reminder_id: int, db: Session):
         return  # Reminder might have been deleted
 
     await asyncio.sleep((reminder.scheduled_time - datetime.utcnow()).total_seconds())
-    success = await send_sms(reminder.phone_number, reminder.message) or await send_ivr(reminder.phone_number, reminder.message)
+    success = False
+    if reminder.channel == "sms" and reminder.phone_number:
+        success = await send_sms(reminder.phone_number, reminder.message)
+    elif reminder.channel == "ivr" and reminder.phone_number:
+        success = await send_ivr(reminder.phone_number, reminder.message)
+    elif reminder.channel == "email" and reminder.email:
+        success = await send_email(reminder.email, "Reminder", reminder.message)
+
     reminder.status = "sent" if success else "failed"
     db.commit()  # Use the passed session to update
 

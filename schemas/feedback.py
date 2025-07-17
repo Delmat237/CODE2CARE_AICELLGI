@@ -1,9 +1,10 @@
 # schemas/feedback.py
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean,ForeignKey
 from sqlalchemy.sql import func
 from typing import Optional
 from enum import Enum
 from database import Base
+from sqlalchemy.orm import relationship
 
 class SubmissionMethod(Enum):
     WEB = "web"
@@ -21,7 +22,7 @@ class Feedback(Base):
     __tablename__ = "feedbacks"
 
     id = Column(Integer, primary_key=True, index=True)
-    patient_id = Column(String, index=True, nullable=True)
+    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=True)
     patient_name = Column(String, index=True, nullable=False)
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
@@ -40,3 +41,5 @@ class Feedback(Base):
     audio_url = Column(String, nullable=True)
     emoji_rating = Column(String, nullable=True)
     is_synced = Column(Boolean, default=False, nullable=False)
+
+    patient = relationship("Patient", backref="feedbacks")

@@ -1,11 +1,10 @@
 import uvicorn
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from routers import feedback, reminders, auth
+from routers import feedback, reminders, auth,patient,dashboard
 from utils.auth import get_current_user
 
 
-#app = FastAPI(title="Patient Feedback and Reminder API", version="1.0.0",dependencies=[Depends(get_current_user)])
 
 app = FastAPI(title="Patient Feedback and Reminder API", version="1.0.0")
 
@@ -19,8 +18,10 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(feedback.router, prefix="/api/feedback", tags=["feedback"],    dependencies=[Depends(get_current_user)])
+app.include_router(feedback.router, prefix="/api/feedback", tags=["feedbacks"],    dependencies=[Depends(get_current_user)])
 app.include_router(reminders.router, prefix="/api/reminder", tags=["reminders"],    dependencies=[Depends(get_current_user)])
+app.include_router(patient.router,prefix="/api/patient", tags=["patients"], dependencies=[Depends(get_current_user)])
+app.include_router(dashboard.router,prefix="/api/dashboard", tags=["dashboard"], dependencies=[Depends(get_current_user)])
 app.include_router(auth.router,prefix="/api/auth", tags=["auth"])
 
 if __name__ == "__main__":
