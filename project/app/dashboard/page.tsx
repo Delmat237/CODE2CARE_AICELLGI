@@ -46,7 +46,7 @@ export default  function DashboardPage() {
       const mockData: PatientFeedback[] = [
         {
           id: 1,
-          patient_name: "Marie Dubois",
+          patient_name: "EYENGA BALA",
           age: 45,
           gender: "female",
           condition: "Hypertension",
@@ -64,7 +64,7 @@ export default  function DashboardPage() {
         },
         {
           id: 2,
-          patient_name: "Jean Martin",
+          patient_name: "BALA ANDEGUE",
           age: 62,
           gender: "male",
           condition: "Diabète",
@@ -82,7 +82,7 @@ export default  function DashboardPage() {
         },
         {
           id: 3,
-          patient_name: "Sophie Laurent",
+          patient_name: "Sophie MENGUE",
           age: 34,
           gender: "female",
           condition: "Migraine",
@@ -100,7 +100,7 @@ export default  function DashboardPage() {
         },
         {
           id: 4,
-          patient_name: "Pierre Moreau",
+          patient_name: "BATCHAKOUI PIERRE",
           age: 58,
           gender: "male",
           condition: "Arthrite",
@@ -118,7 +118,7 @@ export default  function DashboardPage() {
         },
         {
           id: 5,
-          patient_name: "Isabelle Petit",
+          patient_name: "MAGNE ISABELLE",
           age: 29,
           gender: "female",
           condition: "Anxiété",

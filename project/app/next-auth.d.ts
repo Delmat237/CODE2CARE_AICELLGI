@@ -9,6 +9,7 @@ declare module "next-auth" {
     image?: string | null;
     external_id?: string; // Added for credentials provider
     accessToken?: string; // Added for JWT token from FastAPI
+    role?: string  ;
   }
 
   interface Session {
