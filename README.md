@@ -7,16 +7,17 @@
 > **Backend API pour la gestion des retours patients et rappels à Douala General Hospital**
 
 ## 📌 Table of Contents
+
 - [Fonctionnalités](#-fonctionnalités)
     - [Fonctionnalités principales](#fonctionnalités-principales)
-    - [*Intégration et API](#intégration-et-api)
+    - [Intégration et API](#intégration-et-api)
 - [Architecture du systeme](#-architecture)
 - [Arborescence expliquée](#-arborescence-expliquée)
 - [ Vue d'Ensemble des Fichiers et Dossiers](#-vue-densemble-des-fichiers-et-dossiers)
 - [roadmap](#-prochaines-étapes-dici-le-18-juillet-2025)
 - [Mise à jour 1](#-mises-à-jour-14-juillet-2024)
 - [Mise à jour 2](#-nouveautés-mise-à-jour-16-juillet-2024)
-- [Pile Technologique](#-pile-technologique)
+- [Pile-Technologique](#-pile-technologique)
 - [Modèle de données](#-modèles-de-données)
 - [Setup Guide](#-démarrage)
 - [Utilisation](#-utilisation)
@@ -29,12 +30,14 @@ Une API backend robuste et scalable développée avec FastAPI pour collecter les
 ## 🚀 Fonctionnalités
 
 ### **Fonctionnalités principales**
+
 - **Soumission de retours** - Collecte de texte, voix, emojis, et notes par étoiles dans 5 langues.
 - **Gestion hors ligne** - Stockage temporaire et synchronisation différée.
 - **Analyse des retours** - Intégration avec un moteur NLP (à implémenter).
 - **Rappels automatisés** - Envoi via SMS, IVR, ou email avec Twilio et SMTP.
 
 ### **Intégration et API**
+
 - **API RESTful** - Endpoints pour soumissions et rappels.
 - **Support Twilio** - Intégration SMS/IVR pour les zones sans connexion web.
 - **Notifications par email** - Envoi personnalisé via SMTP (ex. SendGrid).
@@ -116,44 +119,53 @@ Track1/backend/
 ## 📋 Vue d'Ensemble des Fichiers et Dossiers
 
 ### **`main.py`**
+
 - **Rôle** : Point d'entrée de l'application FastAPI avec configuration CORS, inclusion des routers, et lancement avec Uvicorn (hôte : `0.0.0.0`, port : `8000`).
 
 ### **`config/settings.py`**
+
 - **Rôle** : Gère les configurations avec Pydantic (`DATABASE_URL`, `TWILIO_*`, `SMTP_*`, `SECRET_KEY`, etc.) chargées depuis `.env`.
 
 ### **`database/`**
+
 - **database.py** : Gère la connexion à PostgreSQL avec SQLAlchemy et fournit la dépendance `get_db`.
 - **migrations/** : Utilise Alembic pour gérer les schémas de la base de données (ex. `users`, `patients`, `feedbacks`, `reminders`).
 
 ### **`models/`**
+
 - **user.py** : Modèle SQLAlchemy pour la table `users`.
 - **patient.py** : Modèle SQLAlchemy pour la table `patients`.
 - **feedback.py** : Modèle SQLAlchemy pour la table `feedbacks`.
 - **reminder.py** : Modèle SQLAlchemy pour la table `reminders`.
 
 ### **`schemas/`**
+
 - **user.py** : Schéma Pydantic pour la validation des données utilisateur.
 - **patient.py** : Schéma Pydantic pour la validation des données patient.
 - **feedback.py** : Schéma Pydantic pour la validation des données de retour.
 - **reminder.py** : Schéma Pydantic pour la validation des données de rappel.
 
 ### **`routers/`**
+
 - **auth.py** : Endpoints pour l'authentification (connexion, inscription, rafraîchissement, déconnexion, profil).
 - **feedback.py** : Endpoints pour les opérations CRUD sur les retours.
 - **reminders.py** : Endpoints pour les opérations CRUD et la planification des rappels.
 - **dashboard.py** : Endpoints pour les analyses administratives.
 
 ### **`utils/`**
+
 - **twilio_client.py** : Intègre Twilio pour les notifications SMS et IVR.
 - **email_client.py** : Intègre SMTP pour les notifications par email.
 
 ### **`tests/`**
+
 - **test_auth.py** : Tests unitaires pour les endpoints d'authentification.
 - **test_feedback.py** : Tests unitaires pour les endpoints de retours.
 - **test_reminders.py** : Tests unitaires pour les endpoints de rappels.
 - **integration/** : Dossier pour les tests d'intégration (à développer).
 
 ### **Fichiers de Configuration**
+
 - **alembic.ini** : Configuration principale d'Alembic.
 - **requirements.txt** : Liste des dépendances (ex. `fastapi`, `sqlalchemy`, `twilio`, `pydantic`).
 - **.env.example** : Modèle de fichier de variables d'environnement avec commentaires.
@@ -168,13 +180,16 @@ Track1/backend/
 - **Sécurité** : Authentification JWT, chiffrement TLS (à configurer), limitation de taux.
 
 ## ⏰ Prochaines Étapes (d'ici le 18 juillet 2025)
+
 - Implémenter les tests d'intégration dans `tests/integration/`.
 - Ajouter la transcription vocale dans `utils/` avec Google Speech-to-Text.
 - Configurer l'authentification JWT dans `main.py` et `routers/`.
 - Générer `openapi.json` pour la documentation des endpoints.
 
 ## 🚀 Mises à Jour (14 juillet 2024)
+
 ### Fonctionnalités Ajoutées
+
 - **Système d'Authentification Complet** : JWT avec tokens d'accès et de rafraîchissement.
 - **CRUD Complet** : Pour les retours et rappels.
 - **Traitement Vocal Initial** : Intégré avec Google Speech-to-Text.
@@ -182,6 +197,7 @@ Track1/backend/
 ## 🔐 Authentification
 
 ### Endpoints
+
 - `POST /api/auth/login` - Authentification avec nom d'utilisateur/mot de passe.
 - `POST /api/auth/register` - Création d'un compte utilisateur.
 - `POST /api/auth/refresh` - Rafraîchissement du token d'accès.
@@ -189,13 +205,15 @@ Track1/backend/
 - `GET /api/auth/me` - Récupération des informations utilisateur.
 
 ### Sécurité
+
 - Tokens JWT signés avec une clé secrète.
 - Tokens de rafraîchissement stockés dans la table `refresh_tokens`.
 - Expiration configurable (30 minutes pour le token d'accès, 7 jours pour le token de rafraîchissement).
 
 ## 📝 API Retours (CRUD Complet)
 
-### Endpoints
+### Endpoints 1.0
+
 | Méthode | Endpoint            | Description                  |
 |---------|---------------------|------------------------------|
 | POST    | `/api/feedback`     | Soumettre un nouveau retour  |
@@ -205,13 +223,15 @@ Track1/backend/
 | DELETE  | `/api/feedback/{id}`| Supprimer un retour          |
 
 ### Fonctionnalités Spéciales
+
 - **Traitement Vocal** : Transcription automatique des enregistrements audio.
 - **Traduction** : Conversion des retours en langue locale vers le français.
 - **Validation** : Modèles Pydantic stricts pour les entrées/sorties.
 
 ## ⏰ API Rappels (CRUD Complet)
 
-### Endpoints
+### Endpoints 1.1
+
 | Méthode | Endpoint            | Description                  |
 |---------|---------------------|------------------------------|
 | POST    | `/api/reminders`    | Créer un nouveau rappel      |
@@ -220,14 +240,16 @@ Track1/backend/
 | PUT     | `/api/reminders/{id}`| Mettre à jour un rappel      |
 | DELETE  | `/api/reminders/{id}`| Supprimer un rappel          |
 
-### Fonctionnalités Spéciales
+### Fonctionnalités Spéciales 1.0
+
 - **Planification Flexible** : Dates et heures configurables.
 - **Multi-Canal** : Envoi par SMS, IVR ou email.
 - **Statut de Livraison** : Suivi de l'état des rappels (en attente, envoyé, échoué).
 
 ## 👤 API Gestion des Patients (CRUD Complet)
 
-### Endpoints
+### Endpoints 1.2
+
 | Méthode | Endpoint            | Description                  |
 |---------|---------------------|------------------------------|
 | POST    | `/api/patients`     | Créer un nouveau patient     |
@@ -236,21 +258,24 @@ Track1/backend/
 | PUT     | `/api/patients/{id}`| Mettre à jour un patient     |
 | DELETE  | `/api/patients/{id}`| Supprimer un patient         |
 
-### Fonctionnalités Spéciales
+### Fonctionnalités Spéciales 1.1
+
 - **Associations** : Liens avec les retours et rappels.
 - **Validation** : Vérification des emails et numéros de téléphone.
 - **Historique** : Suivi des interactions patient.
 
 ## 📊 API Tableau de Bord (Admin/Analytique)
 
-### Endpoints
+### Endpoints 1.3
+
 | Méthode | Endpoint            | Description                  |
 |---------|---------------------|------------------------------|
 | GET     | `/api/dashboard/stats` | Récupérer les statistiques globales |
 | GET     | `/api/dashboard/feedback` | Analyser les retours par catégorie |
 | GET     | `/api/dashboard/reminders` | Analyser les rappels par statut |
 
-### Fonctionnalités Spéciales
+### Fonctionnalités Spéciales 1.2
+
 - **Filtrage** : Par date, patient ou statut.
 - **Visualisation** : Données agrégées pour les rapports.
 - **Accès Restreint** : Réservé aux utilisateurs avec rôle "admin".
@@ -258,20 +283,25 @@ Track1/backend/
 ## 🗃️ Modèles de Données
 
 ### **Utilisateur**
+
 - **Champs** : `id`, `username`, `email`, `phone_number`, `hashed_password`, `role`, `is_active`.
 
 ### **Patient**
+
 - **Champs** : `id`, `user_id` (optionnel), `name`, `email`, `phone_number`, `age`, `gender`, `condition`, `registration_date`.
 
 ### **Retour**
+
 - **Champs** : `id`, `patient_id`, `patient_name`, `age`, `gender`, `phone_number`, `condition`, `treatment_satisfaction`, `communication_rating`, `facility_rating`, `overall_experience`, `recommendation_likelihood`, `feedback_date`, `comments`, `language`, `submission_method`, `sentiment`, `audio_url`, `emoji_rating`, `is_synced`, `processed`.
 
 ### **Rappel**
+
 - **Champs** : `id`, `patient_id`, `phone_number`, `email`, `message`, `language`, `scheduled_time`, `status`, `channel`.
 
 ## 🔧 Prérequis
 
 ### Variables d'Environnement
+
 ```bash
 # Base de Données
 DATABASE_URL=postgresql://user:password@localhost:5432/feedback_db
@@ -301,51 +331,48 @@ GOOGLE_APPLICATION_CREDENTIALS=chemin/vers/credentials.json
 
 ## 📊 API Tableau de Bord (Admin/Analytics)
 
-### Endpoints
+### Endpoints 1.4
 
 |Méthode|Endpoint|Description|
 |---------|------------------------|--------------------------------------|
-|GET|	/api/dashboard/stats	|Statistiques globales (retours, rappels)|
-|GET	|/api/dashboard/feedback	|Analyse des retours par catégorie|
-|GET|	/api/dashboard/reminders|	Analyse des rappels par statut|
+|GET|/api/dashboard/stats|Statistiques globales (retours, rappels)|
+|GET|/api/dashboard/feedback|Analyse des retours par catégorie|
+|GET|/api/dashboard/reminders|Analyse des rappels par statut|
 
-### Fonctionnalités Spéciales
+### Fonctionnalités Spéciales 1.3
 
 - Filtrage: Par date, patient, ou statut
 - Visualisation: Données agrégées pour rapports
 - Accès restreint: Réservé aux utilisateurs avec rôle "admin"
-- 
+  
 ## 👤 API Gestion des Patients
 
-### Endpoints
+### Endpoints 1.5
 
-Méthode	Endpoint	Description
+|Méthode|Endpoint|Description|
 |---------|------------------------|--------------------------------------|
-|POST	|/api/patients|Création d'un nouveau patient|
-|GET	|/api/patients	|Liste tous les patients|
-|GET	|/api/patients/{id}	|Détails d'un patient spécifique|
-|PUT	|/api/patients/{id}	|Mise à jour d'un patient|
-|DELETE	|/api/patients/{id}	|Suppression d'un patient|
+|POST|/api/patients|Création d'un nouveau patient|
+|GET|/api/patients|Liste tous les patients|
+|GET|/api/patients/{id}|Détails d'un patient spécifique|
+|PUT|/api/patients/{id}|Mise à jour d'un patient|
+|DELETE|/api/patients/{id}|Suppression d'un patient|
 
-### Fonctionnalités Spéciales
+### Fonctionnalités Spéciales 1.4
 
 - Association: Lien avec retours et rappels
 - Validation: Vérification des données (email, téléphone)
 - Historique: Suivi des interactions patient
 
-
-
-## Endpoints 
-
+## Endpoints  Finaux
 
  ![alt text](assets/swagger1.png)
-
 
  ![alt text](assets/swagger2.png)
 
 ## 🛠️ Pile Technologique
 
 ### **Backend**
+
 - **Python 3.10+** - Logique principale de l'application
 - **FastAPI 0.100+** - Framework d'API web asynchrone
 - **PostgreSQL** - Base de données principale
@@ -355,6 +382,7 @@ Méthode	Endpoint	Description
 - **SQLAlchemy** - ORM pour la gestion de la base de données
 
 ### **DevOps et Infrastructure**
+
 - **Docker** - Conteneurisation
 - **k3s Cluster** - Orchestration légère
 - **Google Cloud** - Déploiement cloud
@@ -363,16 +391,19 @@ Méthode	Endpoint	Description
 ## 📊 Modèles et Données
 
 ### **Structure des données**
+
 - **Feedbacks** : `id`, `patient_id`, `language`, `content`, `rating`, `voice_data`, `date_submitted`, `processed`.
 - **Reminders** : `id`, `patient_id`, `message`, `language`, `scheduled_time`, `phone_number`, `email`, `status`.
 
 ### **Optimisation**
+
 - **Traitement léger** - Réponses API compressées (Gzip).
 - **Gestion asynchrone** - Tâches différées pour les rappels et emails.
 
 ## 🚦 Démarrage
 
 ### **Prérequis**
+
 ```bash
 Python 3.10+
 PostgreSQL 15+
@@ -384,12 +415,14 @@ SendGrid API key or SMTP credentials
 ### **Installation**
 
 1. **Cloner le dépôt**
+
 ```bash
-git clone --branch Track1 --single-branch https://github.com/Delmat237/CODE2CARE_AICELLGI.git
+git clone --branch Track1/backend/AZANGUE --single-branch https://github.com/Delmat237/CODE2CARE_AICELLGI.git
 cd CODE2CARE_AICELLGI
 ```
 
-2. **Configuration Backend**
+2 **Configuration Backend**
+
 ```bash
 # Créer un environnement virtuel
 python -m venv .venv
@@ -412,6 +445,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 3. **Déploiement Docker**
+
 ```bash
 docker-compose up --build
 ```
@@ -421,12 +455,13 @@ docker-compose up --build
 ### **Endpoints API**
 
 #### **Soumission de retours**
+
 ```bash
 POST /api/feedback
 Content-Type: application/json
 
 {
-  "patient_id": "PAT123",
+  "patient_id": "P000001"
   "language": "french",
   "content": "Bon service",
   "rating": 4,
@@ -435,12 +470,13 @@ Content-Type: application/json
 ```
 
 #### **Planification d'un rappel**
+
 ```bash
 POST /api/reminders
 Content-Type: application/json
 
 {
-  "patient_id": "PAT123",
+  "patient_id": "P000001"
   "message": "Rappel: RDV à 10h",
   "language": "french",
   "scheduled_time": "2025-07-14T10:00:00Z",
@@ -450,10 +486,11 @@ Content-Type: application/json
 ```
 
 #### **Réponse**
+
 ```json
 {
   "id": 1,
-  "patient_id": "PAT123",
+  "patient_id": "P000001"
   "language": "french",
   "content": "Bon service",
   "rating": 4,
@@ -465,11 +502,13 @@ Content-Type: application/json
 ## 🧪 Tests
 
 ### **Tests unitaires**
+
 ```bash
 pytest tests/
 ```
 
 ### **Tests d'intégration**
+
 ```bash
 pytest tests/integration/
 ```
@@ -477,12 +516,14 @@ pytest tests/integration/
 ## 📊 Métriques de Performance
 
 ### **Performance du système**
+
 - **Latence** : < 2 secondes par requête
 - **Débit** : 10 000+ soumissions/jour
 - **Disponibilité** : Objectif SLA 99%
 - **Taille des données** : Réponses API < 1 KB
 
 ## 🔒 Fonctionnalités de Sécurité
+
 - **Chiffrement des données** - AES-256 au repos, TLS en transit
 - **Authentification API** - JWT (à implémenter)
 - **Limitation de taux** - Protection contre abus
@@ -491,6 +532,7 @@ pytest tests/integration/
 ## 🌍 Déploiement
 
 ### **Environnement de production**
+
 ```bash
 # Variables d'environnement
 export DATABASE_URL="postgresql://user:pass@localhost:5432/feedback_db"
@@ -505,6 +547,7 @@ docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ### **Surveillance**
+
 - **Prometheus** - Collecte des métriques
 - **Grafana** - Tableaux de bord
 - **Sentry** - Suivi des erreurs (à configurer)
@@ -524,11 +567,14 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 ## 👨‍💻 Auteur
 
 **Leonel Azangue (Delmat237)**  
+
 - GitHub : [@Delmat237](https://github.com/Delmat237)  
 - LinkedIn : [leonel-azangue](https://www.linkedin.com/in/leonel-azangue)  
-- Email : azangueleonel9@gmail.com  
+- Email : [azangueleonel9@gmail.com](azangueleonel9@gmail.com  )
 
 ## 🙏 Remerciements
+
+- Team AICELLGI 
 - Équipe FastAPI pour le framework performant
 - Twilio pour les services de communication
 - SendGrid pour les emails
