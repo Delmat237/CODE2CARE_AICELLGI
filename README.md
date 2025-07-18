@@ -122,7 +122,7 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 - **TCHOUTZINE TCHETNKOU BALBINO CABREL**  
   - GitHub : [@zoom-BT](https://github.com/zoom-BT)) 
-  - LinkedIn : [@BalbinoTchoutzine](https://www.linkedin.com/in/ balbino-tchoutzine)
+  - LinkedIn : [@BalbinoTchoutzine](https://www.linkedin.com/in/albino-tchoutzine)
   - Email :  tchoutzine@gmail.com  
 
 ## 🙏 Remerciements
