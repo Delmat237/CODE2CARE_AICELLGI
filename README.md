@@ -333,6 +333,16 @@ Méthode	Endpoint	Description
 - Validation: Vérification des données (email, téléphone)
 - Historique: Suivi des interactions patient
 
+
+
+## Endpoints 
+
+
+ ![alt text](assets/swagger1.png)
+
+
+ ![alt text](assets/swagger2.png)
+
 ## 🛠️ Pile Technologique
 
 ### **Backend**
