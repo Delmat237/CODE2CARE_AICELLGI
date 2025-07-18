@@ -121,8 +121,8 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
   - Email : junsts719@gmail.com
 
 - **TCHOUTZINE TCHETNKOU BALBINO CABREL**  
-  - GitHub : [@Etaboy0000](https://github.com/Etaboy0000) 
-  - LinkedIn : ...
+  - GitHub : [@zoom-BT](https://github.com/zoom-BT)) 
+  - LinkedIn : [@BalbinoTchoutzine](https://www.linkedin.com/in/ balbino-tchoutzine)
   - Email :  tchoutzine@gmail.com  
 
 ## 🙏 Remerciements
