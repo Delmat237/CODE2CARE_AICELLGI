@@ -6,6 +6,7 @@ import {
   Globe, Clock, Zap, ChevronDown, ChevronUp, Loader2,
   MessageCircle
 } from 'lucide-react';
+import TransparentHeader from './components/Header';
 
 // Types et interfaces
 type MessageRole = 'user' | 'assistant';
@@ -289,6 +290,7 @@ const App: React.FC = () => {
   // Rendu
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900">
+      
       {/* Sidebar */}
       <div className={`${showSidebar ? 'translate-x-0' : '-translate-x-full'} 
         fixed lg:relative z-20 w-72 h-full bg-white shadow-xl transition-transform duration-300 ease-in-out flex flex-col`}>
@@ -445,6 +447,8 @@ const App: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
+        
+
         <header className="bg-white border-b border-gray-200">
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center">
@@ -542,7 +546,7 @@ const App: React.FC = () => {
             </button>
           </div>
         </header>
-
+        
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto bg-white">
           {activeTab === 'chat' && (

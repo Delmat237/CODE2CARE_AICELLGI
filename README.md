@@ -2,6 +2,16 @@
 
 Un chatbot médical conversationnel basé sur l'IA, spécialement adapté au contexte africain. Ce projet utilise des modèles de langage open source pour fournir des conseils médicaux empathiques, culturellement appropriés et sécurisés.
 
+##  Iamge
+
+ interface de conversation
+
+![alt text](<Capture d’écran du 2025-07-22 12-07-21.png>)
+
+interface pour les ressources tiers
+
+![alt text](<Capture d’écran du 2025-07-22 12-07-39.png>)
+
 ## 🌟 Caractéristiques
 
 ### 🤖 Intelligence Artificielle
